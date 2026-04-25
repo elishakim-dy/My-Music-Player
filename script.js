@@ -16,7 +16,7 @@ let albums = [
     name: "Ariana Grande",
     cover: "images/ariana.jpg",
     songs: [
-      { title: "POV", artist: "Ariana Grande", src: "songs/pov.mp3" },
+      { title: "pov", artist: "Ariana Grande", src: "songs/pov.mp3" },
       { title: "Daydreamin'", artist: "Ariana Grande", src: "songs/dream.mp3" },
       { title: "Santa Tell Me", artist: "Ariana Grande", src: "songs/santa.mp3" },
       { title: "we can't be friends", artist: "Ariana Grande", src: "songs/friends.mp3" },
