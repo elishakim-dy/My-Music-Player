@@ -481,7 +481,7 @@ cursor: pointer;
 
       <div class="header">
         <div class="album">
-          <img id="cover" src="melody.jpg">
+          <img id="cover" src="images/melody.jpg">
         </div>
 
         <div class="info">
@@ -520,7 +520,7 @@ cursor: pointer;
   <div class="player">
     
     <div class="now">
-    <img id="miniCover" src="melody.jpg">
+    <img id="miniCover" src="images/melody.jpg">
     <div class="meta">
     <p id="title">Song Title</p>
     <p id="artistName">Artist</p>
@@ -605,7 +605,7 @@ let albums = [
     songs: [
       { title: "Baby", artist: "Justin Bieber", src: "songs/baby.mp3" },
       { title: "Mistletoe", artist: "Justin Bieber", src: "songs/toe.mp3" },
-      { title: "Confident", artist: "Justin Bieber", src: "songs/con.mp3" },
+      { title: "Confident", artist: "Justin Bieber", src: "songs/samok.mp3" },
       { title: "What Do You Mean?", artist: "Justin Bieber", src: "songs/do.mp3" },
       { title: "One Less Lonely Girl", artist: "Justin Bieber", src: "songs/girl.mp3" }
     ]
@@ -1066,7 +1066,51 @@ function goBackToAlbums() {
   navigate("albums");
 }
 
-renderAlbums();
+function loadSongDurations() {
+  let songsToLoad = 0;
+  let songsLoaded = 0;
+
+  albums.forEach((album, albumIndex) => {
+    album.songs.forEach((song, songIndex) => {
+      if (!song.time) {
+        songsToLoad++;
+        
+        const audio = new Audio(song.src);
+        
+        audio.addEventListener("loadedmetadata", () => {
+          const minutes = Math.floor(audio.duration / 60);
+          const seconds = Math.floor(audio.duration % 60)
+            .toString()
+            .padStart(2, "0");
+          
+          albums[albumIndex].songs[songIndex].time = `${minutes}:${seconds}`;
+          songsLoaded++;
+          
+          if (songsLoaded === songsToLoad) {
+            saveAlbums();
+            renderAlbums();
+          }
+        });
+        
+        audio.addEventListener("error", () => {
+          console.error(`Failed to load: ${song.src}`);
+          songsLoaded++;
+          
+          if (songsLoaded === songsToLoad) {
+            saveAlbums();
+            renderAlbums();
+          }
+        });
+      }
+    });
+  });
+
+  if (songsToLoad === 0) {
+    renderAlbums();
+  }
+}
+
+loadSongDurations();
 navigate("albums");
 </script>
 
